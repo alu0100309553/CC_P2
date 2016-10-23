@@ -42,11 +42,12 @@ public class Estado {
 		return esFinal;
 	}
 
-	// Método para explorar transiciones posibles, recibe el caracter en la pila y la cinta
-	public ArrayList<FTrans> explorar(ArrayList <String> lectura) {
+	// Método para explorar transiciones posibles, recibe el caracter en la pila
+	// y la cinta
+	public ArrayList<FTrans> explorar(ArrayList<String> lectura) {
 		ArrayList<FTrans> aux = new ArrayList<FTrans>();
 		for (FTrans func : ftrans) {
-			if (func.transita(lectura)){
+			if (func.transita(lectura)) {
 				aux.add(func);
 			}
 		}

@@ -1,6 +1,5 @@
 package turing;
 
-
 /*
  * Author: Rubén Labrador Páez.
  * Email: alu0100309553@ull.edu.es
@@ -34,13 +33,13 @@ public class Main {
 		} else {
 			traza = false;
 		}
-		ArrayList <String> cadenas = new ArrayList <String>();
-		for (int i = 0; i < mt.getCintas(); i++){
-			System.out.println("Indique la cadena en la pista " + i +":");
+		ArrayList<String> cadenas = new ArrayList<String>();
+		for (int i = 0; i < mt.getCintas(); i++) {
+			System.out.println("Indique la cadena en la pista " + i + ":");
 			cadenas.add(br.readLine());
 		}
 
-			aceptada = mt.run(cadenas, traza);
+		aceptada = mt.run(cadenas, traza);
 
 		if (aceptada) {
 			System.out.println("La cadena es aceptada");

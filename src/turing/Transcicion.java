@@ -18,11 +18,11 @@ package turing;
 public class Transcicion {
 	private FTrans ftran = null;
 	private Cinta cinta = null;
-	//private Pila pila = null;
+	// private Pila pila = null;
 
 	Transcicion(Cinta c, FTrans n) {
 		ftran = n;
-		cinta = new Cinta (c);
+		cinta = new Cinta(c);
 	}
 
 	public FTrans getFtran() {

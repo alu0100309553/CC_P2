@@ -15,35 +15,37 @@ package turing;
  **/
 import java.util.ArrayList;
 import java.util.Stack;
+
 /*
  * Clase que representa a la cinta del autómata, contiene un ArrayList de String
  * que guarda los caracteres de la cinta, un puntero que apunta a la posición de
  * y el alfabeto de la cinta *
  */
 public class Cinta {
-	private Alfabeto alphabeto;
-	private ArrayList <ArrayList <String>> valores;
-	private ArrayList <Integer> punteros  = new ArrayList<Integer>();
+	private Alfabeto alfabeto;
+	private ArrayList<ArrayList<String>> valores;
+	private ArrayList<Integer> punteros = new ArrayList<Integer>();
 	private int cintas;
 	private String blanco;
 	private int entradaMax = 0;
+	private int punteroMin = 0;
 
 	// Constructor normal
 	Cinta(ArrayList<String> alp, int cintas, String blanco) {
-		alphabeto = new Alfabeto (alp);
+		alfabeto = new Alfabeto(alp);
 		this.cintas = cintas;
 		this.blanco = blanco;
-		valores = new ArrayList <ArrayList<String>>(cintas);
-		for (int i = 0; i < cintas; i++){
-			valores.add(new ArrayList <String>(500));
+		valores = new ArrayList<ArrayList<String>>(cintas);
+		for (int i = 0; i < cintas; i++) {
+			valores.add(new ArrayList<String>(500));
 		}
-		//inicializando las cintas a blanco
-		for (int i = 0; i < 500; i++){
-			for (int j = 0; j < cintas; j++){
+		// inicializando las cintas a blanco
+		for (int i = 0; i < 500; i++) {
+			for (int j = 0; j < cintas; j++) {
 				valores.get(j).add(blanco);
 			}
 		}
-		for (int i = 0; i < cintas; i++){
+		for (int i = 0; i < cintas; i++) {
 			punteros.add(0);
 		}
 	}
@@ -51,62 +53,96 @@ public class Cinta {
 	// Constructor de copia
 	Cinta(Cinta original) {
 		valores = (ArrayList<ArrayList<String>>) original.valores.clone();
-		alphabeto = new Alfabeto(original.alphabeto);
-		punteros =  (ArrayList<Integer>) original.punteros.clone();
+		alfabeto = new Alfabeto(original.alfabeto);
+		punteros = (ArrayList<Integer>) original.punteros.clone();
 		cintas = original.cintas;
 		entradaMax = original.entradaMax;
+		punteroMin = original.punteroMin;
 	}
 
-	public ArrayList <String> read() {
-		ArrayList <String> aux = new ArrayList <String>();
-		for (int i = 0 ; i < cintas ; i++){
-			aux.add(valores.get(i).get(punteros.get(i)));
+	public ArrayList<String> read() {
+		ArrayList<String> aux = new ArrayList<String>();
+		for (int i = 0; i < cintas; i++) {
+			aux.add(valores.get(i).get(punterosNorm().get(i)));
 		}
 		return aux;
 	}
-	public void write(ArrayList <String> datos) {
-		for (int i = 0 ; i < cintas ; i++){
-			valores.get(i).set(punteros.get(i), datos.get(i));
+
+	public void write(ArrayList<String> datos) {
+		for (int i = 0; i < cintas; i++) {
+			if (alfabeto.contiene(datos.get(i))) {
+				valores.get(i).set(punterosNorm().get(i), datos.get(i));
+			} else {
+				System.err.println("Se ha intentado intruducir un simbolo no perteneciente al alfabeto de la cinta");
+				System.exit(1);
+			}
 		}
 	}
-	public void moveRight(){
-		for (int i = 0 ; i < cintas ; i++){
-			punteros.set(i, (500+punteros.get(i)-1)%500);
+
+	public void moveRight() {
+		for (int i = 0; i < cintas; i++) {
+			//punteros.set(i, (500 + punteros.get(i) - 1) % 500);
+			punteros.set(i, (punteros.get(i) - 1));
+			if (punteroMin > punteros.get(i)){
+				punteroMin = punteros.get(i);
+			}
 		}
 	}
-	public void moveLeft(){
-		for (int i = 0 ; i < cintas ; i++){
-			punteros.set(i, (punteros.get(i)+1)%500);
+
+	public void moveLeft() {
+		for (int i = 0; i < cintas; i++) {
+			//punteros.set(i, (punteros.get(i) + 1) % 500);
+			punteros.set(i, (punteros.get(i) + 1));
 		}
 	}
-	public void setCinta (ArrayList <String> cadenas){
-		for (int i = 0; i < cadenas.size(); i++){
+
+	public void setCinta(ArrayList<String> cadenas) {
+		for (int i = 0; i < cadenas.size(); i++) {
 			int k = 0;
-			for (int j = (cadenas.get(i).length() - 1); j >= 0; j --){
-				valores.get(i).set(k, ""+cadenas.get(i).charAt(j));
+			for (int j = (cadenas.get(i).length() - 1); j >= 0; j--) {
+
+				if (alfabeto.contiene("" + cadenas.get(i).charAt(j))) {
+					valores.get(i).set(k, "" + cadenas.get(i).charAt(j));
+				} else {
+					System.err
+							.println("Se ha intentado intruducir un simbolo no perteneciente al alfabeto de la cinta");
+					System.exit(1);
+				}
 				k++;
 			}
 		}
-		for (String aux : cadenas){
-			if (aux.length() > entradaMax){
+		for (String aux : cadenas) {
+			if (aux.length() > entradaMax) {
 				entradaMax = aux.length();
 			}
 		}
 
 	}
-	public String toString (){
+
+	public String toString() {
 		String aux = "";
-		for (int i = 0; i < cintas; i++){
-			for (int j = entradaMax+1; j >=0; j--){
-				if (j == punteros.get(i)){
-					aux += "["+valores.get(i).get(j)+"] ";
-				} 
-				else {
-					aux += valores.get(i).get(j)+" ";
+		for (int i = 0; i < cintas; i++) {
+			for (int j = entradaMax + 1; j >= punteroMin; j--) {
+				if (j == punterosNorm().get(i)) {
+					aux += "[" + valores.get(i).get(pNorm(j)) + "] ";
+				} else {
+					aux += valores.get(i).get(pNorm(j)) + " ";
 				}
 			}
 			aux += " | ";
 		}
 		return aux;
+	}
+	
+	private ArrayList <Integer> punterosNorm(){
+		ArrayList <Integer> aux = new ArrayList <Integer>();
+		for (int p : punteros){
+			aux.add(((p%500)+500)%500);
+		}
+		return aux;
+	}
+	
+	private int pNorm(int n){
+		return ((n%500)+500)%500;
 	}
 }

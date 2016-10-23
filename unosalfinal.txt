@@ -1,0 +1,21 @@
+# Ejemplo de una MT
+q0 q1 q2 q3 q4 q5 # estados
+0 1 # simbolos entrada
+0 1 · X # simbolos de la cinta
+q0 # estado inicial
+· # simbolo de blanco
+q5 # conjunto de acetpación
+1 # número de cintas 
+q0 0 q0 0 L
+q0 · q5 · L
+q0 1 q1 X R
+q1 0 q1 0 R
+q1 1 q1 1 R
+q1 · q2 · R
+q2 1 q2 1 R
+q2 · q3 1 L
+q3 1 q3 1 L
+q3 · q4 · L
+q4 1 q4 1 L
+q4 0 q4 0 L
+q4 X q0 1 L
