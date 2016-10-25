@@ -21,18 +21,18 @@ public class FTrans {
 	private ArrayList<String> escribe = new ArrayList<String>();
 	private String next;
 	private String movimiento;
-	private int cintas;
+	private int pistas;
 
-	FTrans(ArrayList<String> func, int cintas) {
-		for (int i = 0; i < cintas; i++) {
+	FTrans(ArrayList<String> func, int pistas) {
+		for (int i = 0; i < pistas; i++) {
 			lee.add(func.get(i + 1));
 		}
-		next = func.get(cintas + 1);
-		for (int i = 0; i < cintas; i++) {
-			escribe.add(func.get(i + cintas + 2));
+		next = func.get(pistas + 1);
+		for (int i = 0; i < pistas; i++) {
+			escribe.add(func.get(i + pistas + 2));
 		}
-		movimiento = func.get(2 * cintas + 2);
-		this.cintas = cintas;
+		movimiento = func.get(2 * pistas + 2);
+		this.pistas = pistas;
 	}
 
 	public ArrayList<String> lectura() {
@@ -53,7 +53,7 @@ public class FTrans {
 
 	public boolean transita(ArrayList<String> lectura) {
 		boolean aux = true;
-		for (int i = 0; i < cintas; i++) {
+		for (int i = 0; i < pistas; i++) {
 			if (!lectura.get(i).equals(lee.get(i))) {
 				aux = false;
 			}

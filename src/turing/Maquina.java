@@ -1,18 +1,36 @@
 package turing;
+/*
+ * Author: Rubén Labrador Páez.
+ * Email: alu0100309553@ull.edu.es
+ * Tit: Grado Ingeniería Informática - Universidad de La Laguna
+ * Course: 4 - Computación
+ * Subject: Complejidad Computacional
+ * Practice: 2
+ * Class/Program: Máquina de Turing
+ * File: Maquina.java
+ * Description: Programa que simula el funcionamiento de una Máquina de Turing
+ * @author Rubén Labrador Páez
+ * @version 1.0.0 24/10/2016
+ **/
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
 
+/*
+ * Clase que representa a la Máquina de Turing, tiene un constructor que posee como parámetro un array con los datos de la máquina, 
+ * y un método run, que ejecuta la máquina con la cadena o cadenas pasada
+ */
 public class Maquina {
 	private Hashtable<String, Estado> estados = new Hashtable<String, Estado>();
 	private Estado actual;
 	private Cinta cinta;
-	private Stack<Transcicion> trans = new Stack<Transcicion>();
+	private Stack<Transcicion> trans = new Stack<Transcicion>(); //Pila que almacena posibles transiciones por si la máquina fuese no determinista valorar todas las opciones
 	private Alfabeto alfabeto;
 	private String blanco;
-	private int cintas;
+	private int pistas;
 
+	//Constructor
 	Maquina(ArrayList<ArrayList<String>> programa) {
 		for (String est : programa.get(0)) {
 			estados.put(est, new Estado(est));
@@ -24,15 +42,15 @@ public class Maquina {
 			if (estados.containsKey(est)) {
 				estados.get(est).setFinal();
 			} else {
-				System.err.println("El conjunto de estados finales contiene un estado no existente: " + est);
+				System.err.println("El conjunto de estados finales contiene upn estado no existente: " + est);
 				System.exit(1);
 			}
 		}
-		cintas = Integer.parseInt(programa.get(6).get(0));
-		cinta = new Cinta(programa.get(2), cintas, blanco);
+		pistas = Integer.parseInt(programa.get(6).get(0));
+		cinta = new Cinta(programa.get(2), pistas, blanco);
 		for (int i = 7; i < programa.size(); i++) {
 			if (estados.containsKey(programa.get(i).get(0))) {
-				estados.get(programa.get(i).get(0)).addFTran(programa.get(i), cintas);
+				estados.get(programa.get(i).get(0)).addFTran(programa.get(i), pistas);
 			} else {
 				System.err.println("Existe una función de transición que transita desde un estado no existente: "
 						+ programa.get(i));
@@ -41,6 +59,8 @@ public class Maquina {
 		}
 	}
 
+	//Método que ejecuta la máquina, recibe como parametros las cadenas de entrada y si se realiza traza o no, 
+	//devuelve true a false si la cadena es aceptada o no.
 	public boolean run(ArrayList<String> cadenas, boolean traza) {
 		cinta.setCinta(cadenas);
 		boolean ejecutando = true;
@@ -71,7 +91,7 @@ public class Maquina {
 					actual = estados.get(aux.getFtran().getNext());
 				} else {
 					System.err
-							.println("Se ha intentado transitar a un estado no existente: " + aux.getFtran().getNext());
+					.println("Se ha intentado transitar a un estado no existente: " + aux.getFtran().getNext());
 					System.exit(1);
 				}
 				cinta = aux.getCinta();
@@ -80,6 +100,12 @@ public class Maquina {
 					cinta.moveRight();
 				} else if (aux.getFtran().movimiento().equals("L")) {
 					cinta.moveLeft();
+				} else if (aux.getFtran().movimiento().equals("S")){
+
+				} else {
+					System.err
+					.println("Movimiento no permitido: " + aux.getFtran().movimiento());
+					System.exit(1);
 				}
 			}
 		}
@@ -87,6 +113,6 @@ public class Maquina {
 	}
 
 	public int getCintas() {
-		return cintas;
+		return pistas;
 	}
 }

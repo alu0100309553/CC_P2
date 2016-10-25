@@ -1,17 +1,16 @@
 package turing;
-
 /*
  * Author: Rubén Labrador Páez.
  * Email: alu0100309553@ull.edu.es
  * Tit: Grado Ingeniería Informática - Universidad de La Laguna
  * Course: 4 - Computación
  * Subject: Complejidad Computacional
- * Practice: 1
- * Class/Program: Autómata de pila
+ * Practice: 2
+ * Class/Program: Máquina de Turing
  * File: Main.java
- * Description: Programa que simula el funcionamiento de un autómata de pila.
+ * Description: Programa que simula el funcionamiento de una Máquina de Turing
  * @author Rubén Labrador Páez
- * @version 1.0.0 13/10/2016
+ * @version 1.0.0 24/10/2016
  **/
 import java.io.BufferedReader;
 import java.io.IOException;
