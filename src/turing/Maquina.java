@@ -62,6 +62,18 @@ public class Maquina {
 	//Método que ejecuta la máquina, recibe como parametros las cadenas de entrada y si se realiza traza o no, 
 	//devuelve true a false si la cadena es aceptada o no.
 	public boolean run(ArrayList<String> cadenas, boolean traza) {
+		
+		//Comprobar la cadena de entrada si corresponde con el alfabeto de entrada
+		for (int i = 0; i < cadenas.size(); i++) {
+			for (int j = (cadenas.get(i).length() - 1); j >= 0; j--) {
+				if (!alfabeto.contiene("" + cadenas.get(i).charAt(j))) {
+					System.err
+					.println("Se ha intentado intruducir un simbolo no perteneciente al alfabeto de entrada");
+					System.exit(1);
+				} 
+			}
+		}
+
 		cinta.setCinta(cadenas);
 		boolean ejecutando = true;
 		boolean aceptada = false;
