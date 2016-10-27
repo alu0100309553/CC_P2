@@ -34,7 +34,7 @@ public class Main {
 		}
 		ArrayList<String> cadenas = new ArrayList<String>();
 		for (int i = 0; i < mt.getCintas(); i++) {
-			System.out.println("Indique la cadena en la pista " + i + ":");
+			System.out.println("Indique la cadena en la cinta " + i + ":");
 			cadenas.add(br.readLine());
 		}
 

@@ -28,7 +28,7 @@ public class Maquina {
 	private Stack<Transcicion> trans = new Stack<Transcicion>(); //Pila que almacena posibles transiciones por si la máquina fuese no determinista valorar todas las opciones
 	private Alfabeto alfabeto;
 	private String blanco;
-	private int pistas;
+	private int cintas;
 
 	//Constructor
 	Maquina(ArrayList<ArrayList<String>> programa) {
@@ -46,11 +46,11 @@ public class Maquina {
 				System.exit(1);
 			}
 		}
-		pistas = Integer.parseInt(programa.get(6).get(0));
-		cinta = new Cinta(programa.get(2), pistas, blanco);
+		cintas = Integer.parseInt(programa.get(6).get(0));
+		cinta = new Cinta(programa.get(2), cintas, blanco);
 		for (int i = 7; i < programa.size(); i++) {
 			if (estados.containsKey(programa.get(i).get(0))) {
-				estados.get(programa.get(i).get(0)).addFTran(programa.get(i), pistas);
+				estados.get(programa.get(i).get(0)).addFTran(programa.get(i), cintas);
 			} else {
 				System.err.println("Existe una función de transición que transita desde un estado no existente: "
 						+ programa.get(i));
@@ -60,9 +60,9 @@ public class Maquina {
 	}
 
 	//Método que ejecuta la máquina, recibe como parametros las cadenas de entrada y si se realiza traza o no, 
-	//devuelve true a false si la cadena es aceptada o no.
+	//devuelve true o false si la cadena es aceptada o no.
 	public boolean run(ArrayList<String> cadenas, boolean traza) {
-		
+
 		//Comprobar la cadena de entrada si corresponde con el alfabeto de entrada
 		for (int i = 0; i < cadenas.size(); i++) {
 			for (int j = (cadenas.get(i).length() - 1); j >= 0; j--) {
@@ -108,23 +108,26 @@ public class Maquina {
 				}
 				cinta = aux.getCinta();
 				cinta.write(aux.getFtran().escritura());
-				if (aux.getFtran().movimiento().equals("R")) {
-					cinta.moveRight();
-				} else if (aux.getFtran().movimiento().equals("L")) {
-					cinta.moveLeft();
-				} else if (aux.getFtran().movimiento().equals("S")){
+				for (int i = 0 ; i < cintas ; i++){
+					if (aux.getFtran().movimiento(i).equals("R")) {
+						cinta.moveRight(i);
+					} else if (aux.getFtran().movimiento(i).equals("L")) {
+						cinta.moveLeft(i);
+					} else if (aux.getFtran().movimiento(i).equals("S")){
 
-				} else {
-					System.err
-					.println("Movimiento no permitido: " + aux.getFtran().movimiento());
-					System.exit(1);
+					} else {
+						System.err
+						.println("Movimiento no permitido: " + aux.getFtran().movimiento(i));
+						System.exit(1);
+					}
 				}
+
 			}
 		}
 		return aceptada;
 	}
 
 	public int getCintas() {
-		return pistas;
+		return cintas;
 	}
 }
